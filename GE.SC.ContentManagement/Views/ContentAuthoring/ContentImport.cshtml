@@ -1,0 +1,52 @@
+﻿@using System.Web.Mvc
+
+@model GE.SC.ContentAuthoring.Models.ImportModel
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Import</title>
+    <link href="~/Styles/content-export-import.css" rel="stylesheet" />
+</head>
+<body>
+    <section class="contentexport-admin content-list">
+        <div class="form-fields">
+            @if (Model != null)
+            {
+                <div id="ImportTool" class="container">
+                    <div class="row">
+                        <div class="statusMessage">
+
+                        </div>
+                        @if (Model.AvailableLanguages != null && Model.AvailableLanguages.Any())
+                        {
+                            <div>
+                                <div class="form-field">
+                                    <label>Choose Excel File</label>
+                                    <input type="file" id="dataFile" name="upload" />
+                                </div>
+                                @*<div class="form-field">
+                                    <label>Add DisplayName</label>
+                                    @Html.CheckBoxFor(m => m.IsDisplayName, new { id = "chkBoxDisplayName" })
+                                </div>*@
+                                <div class="form-field">
+                                    <label>Target Language</label>
+                                    @Html.DropDownListFor(m => m.SelectedLanguage, new SelectList(Model.AvailableLanguages, "value", "Text"), new { id = "drpLanguages" })
+                                </div>
+                            </div>
+                            <div class="btn-container">
+                                <input type="submit" value="Import" id="import">
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+    <script src="~/sitecore/shell/Controls/Lib/jQuery/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/content-export-import.js"></script>
+</body>
+</html>

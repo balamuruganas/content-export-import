@@ -1,0 +1,96 @@
+﻿.contentexport-admin {
+    width: 600px;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+.content-title {
+    text-align: center;
+}
+
+.form-fields {
+    overflow: auto;
+    border: 1px solid #ccc;
+    padding: 0 10px;
+    width:400px;
+}
+
+input[type=text], input[type=password], input[type=date], input[type=datetime], input[type=number], input[type=search], input[type=time], input[type=url], input[type=email], textarea, select {
+    border: 1px solid #ccc;
+    padding: 2px 5px;
+    margin: 0 2px 0 8px;
+    outline: none;
+    font-size: 13px;
+    vertical-align: top;
+}
+
+input[type="submit"] {
+    background: #333;
+    padding: 8px 10px;
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    min-width: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: inset 0 0 0 0 #31302B;
+}
+
+input#IncludeChildren {
+    vertical-align: top;
+    margin: 5px 0 11px 3px;
+}
+
+.form-field {
+    margin: 25px 0;
+}
+
+.btn-container {
+    padding-left: 203px;
+    margin: 20px 0;
+}
+
+input[type="file"] {
+    margin-left: 7px;
+}
+
+.export-section .form-label, .export-section .form-label {
+    float: left;
+    width: 27%;
+}
+
+input[type=checkbox], input[type="file"] {
+    outline: none;
+}
+
+.statusMessage {
+    color: #1c732f;
+    font-size: 18px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.export-section .btn-container {
+    padding-left: 235px;
+}
+
+.export-section .btn-container {
+    padding-left: 223px;
+}
+.export-section {
+    margin: 20px;
+}
+
+.template-fields {
+    display: none;
+}
+
+.chk-includedchildren {
+    height: 20px;
+    width: 20px;
+}
+
+#export {
+    width: 200px;
+}

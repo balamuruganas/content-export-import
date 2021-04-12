@@ -1,0 +1,62 @@
+﻿@using System.Web.Mvc
+@model GE.SC.ContentAuthoring.Models.ExportModel
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Export</title>
+    <link href="~/Styles/content-export-import.css" rel="stylesheet" />
+    <link href="~/Styles/ultraselect/jquery.ultraselect.css" rel="stylesheet" />
+</head>
+
+<body>
+    <section class="export-section">
+        <div class="form-fields">
+            @if (Model != null)
+            {
+                <div class="container">
+                    <div class="row">
+                        <div class="statusMessage"></div>
+
+                        @if (!string.IsNullOrEmpty(Model.ID) && Model.AvailableLanguages != null && Model.AvailableLanguages.Any())
+                        {
+                            <div>
+                                <div class="form-field">
+                                    <label class="form-label">Include Children:</label>
+                                    @Html.CheckBoxFor(m => m.IncludeChildren)
+                                </div>
+
+                                <div class="form-field">
+                                    <label class="form-label">Source Language:</label>
+                                    @Html.DropDownListFor(m => m.SelectedLanguage, new SelectList(Model.AvailableLanguages, "value", "Text"), new { id = "drpLanguages" })
+
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Select Template:</label>
+                                    @Html.DropDownListFor(m => m.SelectedTemplate, new SelectList(Model.Templates, "value", "Text"), new { id = "drpTemplates", disabled = true })
+                                </div>
+                                <div class="form-field template-fields">
+                                    <label class="form-label">Choose Template Fields</label>
+                                    @Html.ListBox("TemplateFields", new SelectList(""), new { disabled = true })
+                                </div>
+
+                            </div>
+                            <div class="btn-container">
+                                <input type="submit" value="Export" id="export">
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+    <script src="~/sitecore/shell/Controls/Lib/jQuery/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/ultraselect/jquery.ultraselect.min.js"></script>
+    <script src="~/Scripts/content-export-import.js"></script>
+</body>
+</html>
+
+
