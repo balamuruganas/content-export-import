@@ -1,0 +1,112 @@
+cd 'master:/sitecore/content/Sitecore/Storefront/Home/Company'
+$SubItemLanguages = Get-ChildItem -Recurse . -Language * -Version * | Sort-Object | Select-Object {$_.Language} -unique
+
+$subItemLanguageTypes = @{}
+
+Foreach($language in $SubItemLanguages) { 
+    $textData = $language.'$_.Language';
+    $subItemLanguageTypes[$textData.Name] = $textData.Name
+}
+
+$SubItemTemplates = Get-ChildItem -Recurse . -Version * | Select-Object {$_.TemplateID}, {$_.TemplateName} -unique
+
+$templateTypes = @{}
+
+Foreach($template in $SubItemTemplates) { 
+    if($template.'$_.TemplateID' -ne "{A87A00B1-E6DB-45AB-8B54-636FEC3B5523}"){
+    $templateTypes[$template.'$_.TemplateName'] = $template.'$_.TemplateID'
+    }
+}
+
+if($subItemLanguageTypes.Count -gt 1 -or $templateTypes.Count -gt 1){
+
+	$props = @{
+		Parameters = @(
+			@{Name="languageToCheck"; Title="Select Language"; Options=$subItemLanguageTypes; Tooltip="Selected Item contain sub-items with the following languages. Which language items you would like to export?"; Editor="combobox"} 
+			@{Name="templateToCheck"; Title="Select Template"; Options=$templateTypes; Tooltip="Selected Item contain sub-items with the following templates. Which template items you would like to export?"; Editor="combobox"} 
+		)
+		Title = "Export Item"
+		Description = "Choose the criteria for the report."
+		Width = 550
+		Height = 300
+		ShowHints = $true
+	}
+
+	$result = Read-Variable @props
+
+	if($result -eq "cancel"){
+		exit
+	}
+
+}
+
+
+$templateID = $templateToCheck
+
+function GetAllLanguageVersions($item) 
+{
+    Get-Item $item.ProviderPath -Language * -Version *
+}
+
+$SubItems = Get-ChildItem -Language $languageToCheck -Recurse . | Where-Object { $_.TemplateID -match $templateID  } 
+
+if($SubItems.Count -eq 0){
+    Show-Alert "No items found!"
+} else {
+    $props = @{
+        Title = "Export Item"
+        InfoTitle = "Total $($SubItems.Count) items found!"
+        InfoDescription = "Export Item Data"
+        PageSize = 100
+    }
+	[string[]] $fields = "ID"
+    [string[]] $fields += "Name"
+	[string[]] $fields += "Title"
+	$itemFields = $SubItems | Get-ItemField
+    [string[]] $fieldss +=  $itemFields
+	
+   #[string[]] $fields +=  "Language"
+   #$itemFields = $fields | Get-ItemField
+   #[string[]] $fields +=  $fields
+    
+    
+    $SubItems |
+        Show-ListView @props -Property $fields
+}
+Close-Window
+
+
+function GetItem($query)
+{
+	$items = $item.Axes.SelectItems($query[0])
+	$item = $items | Where-Object { $_.Name -match $query[1] }
+	return $item.ID
+}
+
+$item = Get-Item -Path master -ID "{E5AC19C1-9906-4E94-B202-76241DAF9059}"
+
+$query = "$($item.Paths.Path)" +"/" + $item.Fields["SubItems"].Source.TrimStart("query:")
+$text ="about-storefront"
+
+$result = GetItem $query, $text
+Write-Host $result
+
+
+
+
+$item = Get-Item -Path master -ID "{E5AC19C1-9906-4E94-B202-76241DAF9059}"
+
+$query = $item.Fields["SubItems"].Source.TrimStart("query:")
+
+$text ="about-storefront"
+
+
+function GetItem($query, $text)
+{
+	if ($path.StartsWith("query:"))
+	{
+		$items = $item.Axes.SelectItems("$($item.Paths.Path)/$query")
+		$item = $items | Where-Object { $_.Name -match $text }
+		return $item
+	}
+}
